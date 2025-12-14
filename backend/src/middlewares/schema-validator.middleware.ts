@@ -1,7 +1,7 @@
 import express from "express";
 import { ZodObject } from "zod";
 
-export const ValidateScheam = (schema: ZodObject<any>) => {
+export const ValidateSchema = (schema: ZodObject<any>) => {
   return (
     req: express.Request,
     res: express.Response,
