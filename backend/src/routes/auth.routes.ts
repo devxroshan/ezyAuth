@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 router.post('/signup', SignUp)
-router.patch('verify-email',VerifyEmail)
-router.get('login', Login)
+router.patch('/verify-email',VerifyEmail)
+router.get('/login', Login)
 
 export default router;
