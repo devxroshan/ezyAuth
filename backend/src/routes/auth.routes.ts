@@ -1,22 +1,18 @@
-import express from 'express'
+import express from 'express';
+import { TRequestController } from '../config/types.config';
 
 // Controllers
 import {
     SignUp,
     Login,
     VerifyEmail,
-    Logout
-} from '../controllers/auth.controller'
+    signup
+} from "../controllers/auth.controller"
 
-const router = express.Router()
+const router = express.Router();
 
-
-router.post('signup', SignUp)
-
-router.patch('verify-email', VerifyEmail)
-
+router.post('/signup', SignUp)
+router.patch('verify-email',VerifyEmail)
 router.get('login', Login)
-
-router.get('logout', Logout)
 
 export default router;

@@ -1,7 +1,11 @@
 import express from 'express'
 
-export type TController = {
+export type TRequestController = (
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    next: express.NextFunction,
+) => Promise<any>;
+
+export const Environment = {
+    isDev: process.env.NODE_ENV as string === 'development'?true:false
 }

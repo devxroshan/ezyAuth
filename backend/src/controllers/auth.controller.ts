@@ -1,25 +1,19 @@
-// Utils
-import { AsyncRequestHandler } from "../utils/async-request-handler.util";
-import { SuccessResponse } from "../config/object-utils.config";
-import { TController } from "../config/types.config";
+import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
+import { TRequestController } from "../config/types.config";
 
-const signUp = async ({req, res, next}:TController) => {
-  SuccessResponse(201, "User created successfully.");
-};
 
-const verifyEmail = async ({req, res, next}:TController) => {
-  SuccessResponse(200, "Email verified successfully.");
-};
+export const signup:TRequestController = async (req, res, next) => {
+    
+}
 
-const login = async ({req, res, next}:TController) => {
-    SuccessResponse(200, "Login successfully.");
-};
+const verifyEmail:TRequestController = async (req, res, next) => {
 
-const logout = async ({req, res, next}:TController) => {
-    SuccessResponse(200, "Logoutt successfully.");
-};
+}
 
-export const SignUp = AsyncRequestHandler(signUp);
-export const VerifyEmail = AsyncRequestHandler(verifyEmail);
-export const Login = AsyncRequestHandler(login);
-export const Logout = AsyncRequestHandler(logout);
+const login:TRequestController = async (req, res, next) => {
+
+}
+
+export const SignUp = AsyncRequestHandler(signup)
+export const VerifyEmail = AsyncRequestHandler(verifyEmail)
+export const Login = AsyncRequestHandler(login)

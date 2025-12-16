@@ -1,32 +1,46 @@
 import express from 'express'
-import helmet from 'helmet';
-import cors from 'cors';
+import {config} from 'dotenv'
 import cookieParser from 'cookie-parser'
-import { configDotenv } from 'dotenv';
+import helmet from 'helmet'
+import cors from 'cors'
 
 // Routes
 import authRoutes from './routes/auth.routes'
-import { GlobalErrorHandler } from './utils/error-handler.util';
 
-const app = express();
-configDotenv()
+// Filters
+import { allExceptionFilter } from './filters/all-exception.filter'
 
-const PORT = process.env.PORT || 8000;
+// Middlewares
+import { responseMiddleware } from './middlewares/response.middleware'
+
+const app = express()
+config()
+
+const PORT:number = parseInt(process.env.PORT as string) || 8000
 
 
-app.use(cors({
-    origin: process.env.FRONTEND,
-    allowedHeaders: 'application/json',
-    methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE']
-}))
-app.use(helmet())
+// Middlewares
+app.use(express.json())
 app.use(cookieParser())
+app.use(helmet())
+app.use(cors({
+    origin: process.env.FRONTEND as string ?? 'http://localhost:3000',
+    allowedHeaders: 'Content-Type',
+    methods: ['GET', 'PUT', 'POST', 'PATCH'],
+    credentials: true
+}))
 
-app.use('/api/auth/',authRoutes)
+
+// Routes
+app.use('/api/auth', authRoutes)
 
 
-app.use(GlobalErrorHandler)
+
+
+
+// Global Error Handler
+app.use(allExceptionFilter)
 
 app.listen(PORT, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
-});
+    console.log(`Server is running at http://localhost:${PORT}`)
+})
