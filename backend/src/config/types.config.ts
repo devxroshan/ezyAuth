@@ -1,5 +1,12 @@
 import express from 'express'
 
+export type TResponseError = {
+    statusCode: number;
+    msg: string;
+    code: string;
+    details?: {}
+}
+
 export type TRequestController = (
     req: express.Request,
     res: express.Response,

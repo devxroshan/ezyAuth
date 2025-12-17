@@ -1,5 +1,5 @@
 import express from 'express'
-import {config} from 'dotenv'
+import {configDotenv} from 'dotenv'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import cors from 'cors'
@@ -13,11 +13,10 @@ import { allExceptionFilter } from './filters/all-exception.filter'
 // Middlewares
 import { responseMiddleware } from './middlewares/response.middleware'
 
+
 const app = express()
-config()
-
+configDotenv()
 const PORT:number = parseInt(process.env.PORT as string) || 8000
-
 
 // Middlewares
 app.use(express.json())
