@@ -34,8 +34,6 @@ app.use('/api/auth', authRoutes)
 
 
 
-
-
 // Global Error Handler
 app.use(allExceptionFilter)
 

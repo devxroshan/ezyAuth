@@ -10,7 +10,7 @@ export type TResponseError = {
 export type TRequestController = (
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction,
+    next?: express.NextFunction,
 ) => Promise<any>;
 
 export const Environment = {

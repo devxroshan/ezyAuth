@@ -2,6 +2,8 @@ import { Environment } from "../config/types.config";
 import express from "express";
 import { Prisma } from "@prisma/client";
 import { dbExceptionFilter } from "./db-exception.filter";
+import { JsonWebTokenError } from "jsonwebtoken";
+import { jwtExceptionFilter } from "./jwt-exception.filter";
 
 export const allExceptionFilter = (err:any, req:express.Request, res:express.Response, next:express.NextFunction) => {
     const statusCode = err?.statusCode || 500
@@ -12,6 +14,11 @@ export const allExceptionFilter = (err:any, req:express.Request, res:express.Res
 
     if(err instanceof Prisma.PrismaClientKnownRequestError){
         dbExceptionFilter(err, req, res,next);
+        return;
+    }
+
+    if(err instanceof JsonWebTokenError){
+        jwtExceptionFilter(err, req, res,next);
         return;
     }
     

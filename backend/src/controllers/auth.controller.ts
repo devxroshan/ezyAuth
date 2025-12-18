@@ -10,7 +10,7 @@ import { SignUpSchema } from "../schema/auth.schema";
 import { BadRequest, NotFound, ValidationError } from "../config/exceptions.config";
 import { mailTransporter } from '../config/mailer.config';
 
-export const signup: TRequestController = async (req, res, next) => {
+export const signup: TRequestController = async (req, res) => {
   const isValidUserDetails = schemaValidator(SignUpSchema, req.body);
   if (isValidUserDetails != true) {
     throw new ValidationError("Invalid SignUp details.", isValidUserDetails);
@@ -48,7 +48,7 @@ export const signup: TRequestController = async (req, res, next) => {
   });
 };
 
-const verifyEmail: TRequestController = async (req, res, next) => {
+const verifyEmail: TRequestController = async (req, res) => {
   const token = req.query?.token
 
   if(!token || typeof token !== 'string'){
@@ -72,7 +72,7 @@ const verifyEmail: TRequestController = async (req, res, next) => {
   })
 };
 
-const login: TRequestController = async (req, res, next) => {};
+const login: TRequestController = async (req, res) => {};
 
 export const SignUp = AsyncRequestHandler(signup);
 export const VerifyEmail = AsyncRequestHandler(verifyEmail);
