@@ -19,6 +19,11 @@ export const dbExceptionFilter = (
       errObj.msg = "Unique constraint violation. May the email you entered already exists.";
       errObj.code = "DUPLICATE_KEY";
       break;
+    case "P2025":
+      errObj.statusCode = 404;
+      errObj.msg = "Record not found.";
+      errObj.code = "NOT_FOUND";
+      break;
   }
 
   res.status(errObj.statusCode).json({

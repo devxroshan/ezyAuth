@@ -14,5 +14,5 @@ export type TRequestController = (
 ) => Promise<any>;
 
 export const Environment = {
-    isDev: process.env.NODE_ENV as string === 'development'?true:false
+    isDev: process.env.NODE_ENV as string == 'development'?true:false
 }
