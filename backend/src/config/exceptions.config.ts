@@ -31,6 +31,12 @@ export class ValidationError extends AppError {
     }
 }
 
+export class Unauthorized extends AppError {
+    constructor(msg:string, details?:any){
+        super(401, msg,"UNAUTHORIZED", details)
+    }
+}
+
 export class InternalServerError extends AppError {
     constructor(msg:string, details?:any){
         super(500, msg,"INTERNAL_SERVER_ERROR", details)
