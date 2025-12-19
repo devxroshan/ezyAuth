@@ -29,6 +29,13 @@ export const signup: TRequestController = async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
     },
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      email: true,
+    }
   });
 
   const emailConfirmationToken = await jwt.sign(
@@ -91,9 +98,9 @@ const login: TRequestController = async (req, res) => {
 
   if (
     !email ||
-    typeof email != "string" ||
+    typeof email != 'string' ||
     !password ||
-    typeof password != "string"
+    typeof password != 'string'
   ) {
     throw new BadRequest("Email and Password required.");
   }

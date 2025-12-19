@@ -36,7 +36,7 @@ app.use(cors({
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/project',IsLoggedIn, projectRoutes)
-app.use('/api/project-user',ValidateAPIKey, projectUserRoutes)
+app.use('/api/project-user/:apiKey',ValidateAPIKey, projectUserRoutes)
 
 
 

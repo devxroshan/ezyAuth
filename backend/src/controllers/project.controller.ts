@@ -4,6 +4,7 @@ import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
 import { TRequestController } from "../config/types.config";
 import { BadRequest, NotFound } from "../config/exceptions.config";
 import prisma from "../config/prisma-db.config";
+import { CreateProjectUserInput } from '../config/types.config';
 
 const createProject:TRequestController = async (req, res) => {
     const projectName = req.body.name
@@ -68,6 +69,17 @@ const getProjectUsers:TRequestController = async (req, res) => {
     const projectUsers = await prisma.projectUser.findMany({
         where: {
             projectId
+        },
+        select: {
+            name: true,
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            username: true,
+            isVerified: true,
+            email: true,
+            metadata: true,
+            projectId: true         
         }
     })
 
