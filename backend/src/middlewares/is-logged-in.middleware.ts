@@ -16,7 +16,7 @@ declare global {
 
 const isLoggedIn:TRequestController = async (req, res, next):Promise<void> => {
     if(!next){
-        throw new InternalServerError("Next function is required.")
+        throw new InternalServerError("Something went wrong. Try again later.")
     }
 
     const sessionToken = req.cookies['session-token']

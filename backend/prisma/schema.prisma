@@ -33,4 +33,19 @@ model Project {
   apiKey String
 
   author User @relation(fields: [authorId], references: [id])
+  projectUser ProjectUser[]
+}
+
+model ProjectUser {
+  id String @id @default(uuid())
+  name String?
+  username String? @unique
+  email String @unique
+  password String
+  isVerified Boolean
+  metadata Json? 
+  projectId String
+  project Project @relation(fields: [projectId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

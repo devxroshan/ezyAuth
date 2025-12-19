@@ -61,11 +61,51 @@ const getProject:TRequestController = async (req, res) => {
 }
 
 const getProjectUsers:TRequestController = async (req, res) => {
+    const projectId = req.params.project_id
 
+    if(!projectId || typeof projectId != 'string') throw new BadRequest('Project ID required.')
+    
+    const projectUsers = await prisma.projectUser.findMany({
+        where: {
+            projectId
+        }
+    })
+
+    if(projectUsers.length <= 0){
+        throw new NotFound("No ProjectUser yet.")
+    }
+
+    res.status(200).json({
+        ok: true,
+        msg: 'ProjectUser fetched successfully.',
+        data: projectUsers
+    })
 }
 
 const deleteProject:TRequestController = async (req, res) => {
-    
+    const projectId = req.params.project_id
+
+    if(!projectId || typeof projectId != 'string'){
+        throw new BadRequest("Project ID required.")
+    }
+
+    await prisma.projectUser.deleteMany({
+        where: {
+            projectId
+        }
+    })
+
+    await prisma.project.delete({
+        where: {
+            authorId: req.user.id,
+            id: projectId
+        }
+    })
+
+    res.status(200).json({
+        ok: true,
+        msg: "Project and It's user are deleted.",
+    })
 }
 
 export const CreateProject = AsyncRequestHandler(createProject)

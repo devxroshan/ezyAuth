@@ -7,6 +7,7 @@ import cors from 'cors'
 // Routes
 import authRoutes from './routes/auth.routes'
 import projectRoutes from './routes/project.routes'
+import projectUserRoutes from './routes/project-user.routes'
 
 // Filters
 import { allExceptionFilter } from './filters/all-exception.filter'
@@ -14,6 +15,7 @@ import { allExceptionFilter } from './filters/all-exception.filter'
 // Middlewares
 import { responseMiddleware } from './middlewares/response.middleware'
 import { IsLoggedIn } from './middlewares/is-logged-in.middleware'
+import { ValidateAPIKey } from './middlewares/validate-api-key.middleware'
 
 
 const app = express()
@@ -34,6 +36,7 @@ app.use(cors({
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/project',IsLoggedIn, projectRoutes)
+app.use('/api/project-user',ValidateAPIKey, projectUserRoutes)
 
 
 
