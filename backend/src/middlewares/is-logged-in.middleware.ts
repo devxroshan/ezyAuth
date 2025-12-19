@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-import { BadRequest, NotFound } from "../config/exceptions.config";
+import { BadRequest, InternalServerError, NotFound } from "../config/exceptions.config";
 import { TRequestController } from "../config/types.config";
 import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
 import { User } from '@prisma/client';
@@ -9,13 +9,17 @@ import prisma from '../config/prisma-db.config';
 declare global {
     namespace Express {
         interface Request {
-            user: Partial<User>
+            user: User
         }
     }
 }
 
-const isLoggedIn:TRequestController = async (req, res,next):Promise<void> => {
-    const sessionToken = req.cookies.sessionToken
+const isLoggedIn:TRequestController = async (req, res, next):Promise<void> => {
+    if(!next){
+        throw new InternalServerError("Next function is required.")
+    }
+
+    const sessionToken = req.cookies['session-token']
 
     if(!sessionToken || typeof sessionToken != 'string'){
         throw new BadRequest("Token required.")
@@ -34,7 +38,7 @@ const isLoggedIn:TRequestController = async (req, res,next):Promise<void> => {
     }
 
     req.user = user
-    next
+    next()
 }
 
 export const IsLoggedIn = AsyncRequestHandler(isLoggedIn)
