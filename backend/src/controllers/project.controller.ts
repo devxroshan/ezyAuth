@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken'
 import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
 import { TRequestController } from "../config/types.config";
 import { BadRequest, NotFound } from "../config/exceptions.config";
-import prisma from "../config/prisma-db.config";
-import { CreateProjectUserInput } from '../config/types.config';
+import prisma from "../config/prisma-db.config";;
 
 const createProject:TRequestController = async (req, res) => {
     const projectName = req.body.name
@@ -13,7 +12,7 @@ const createProject:TRequestController = async (req, res) => {
         throw new BadRequest("Project name required.")
     }
 
-    if(!req.user?.id){
+    if(!req.user.id){
         throw new BadRequest("User id required.")
     }
 
