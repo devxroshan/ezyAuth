@@ -3,6 +3,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 
+// Stores
+import { useAppStore } from "../stores/app.store";
+
 export const SessionCheckerWrapper = ({
   children,
 }: {
@@ -10,6 +13,9 @@ export const SessionCheckerWrapper = ({
 }) => {
   const pathname = usePathname()
   const router = useRouter()
+
+  // Stores
+  const appStore = useAppStore()
 
   useEffect(() => {
     const sessionToken = document?.cookie
@@ -22,10 +28,12 @@ export const SessionCheckerWrapper = ({
         if(pathname != '/login' && pathname != '/signup'){
           router.push('/login')
         }
+        appStore.setIsAuthenticated(false)
       }else {
         if(pathname == '/login' || pathname == '/signup'){
           router.push('/')
         }
+        appStore.setIsAuthenticated(true)
       }
   }, [pathname]);
 

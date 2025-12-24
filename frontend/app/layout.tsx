@@ -29,9 +29,9 @@ export default function RootLayout({
       <QueryProviderWrapper>
         <SessionCheckerWrapper>
           <GetUserWrapper>
-            <body className={`${poppins.className} antialiased`}>
-              {children}
+            <body className={`${poppins.className} antialiased overflow-x-hidden md:flex items-center justify-start`}>
               <Navbar />
+              {children}
             </body>
           </GetUserWrapper>
         </SessionCheckerWrapper>
