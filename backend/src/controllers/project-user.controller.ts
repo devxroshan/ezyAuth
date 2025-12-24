@@ -29,7 +29,7 @@ const projectUserSignUp: TRequestController = async (req, res) => {
     password: hashedPassword,
     isVerified: false,
     metadata: req.body.metadata ?? {},
-    projectId: req.project.id,
+    projectId: req.project?.id,
   };
 
   if(projectUserInfo.username){
@@ -75,7 +75,7 @@ const projectUserSignUp: TRequestController = async (req, res) => {
       name: newProjectUser.name || newProjectUser.email,
       confirmationUrl: `${
         process.env.BACKEND as string
-      }/api/project-user/${req.project.apiKey}/verify-email?token=${emailConfirmationToken}`,
+      }/api/project-user/${req.project?.apiKey}/verify-email?token=${emailConfirmationToken}`,
       currentYear: new Date().getFullYear(),
     },
   } as any);
@@ -153,7 +153,7 @@ const projectUserLogin: TRequestController = async (req, res) => {
         name: doesUserExists.name,
         confirmationUrl: `${
           process.env.BACKEND as string
-        }/api/${req.project.apiKey}/verify-email?token=${emailConfirmationToken}`,
+        }/api/${req.project?.apiKey}/verify-email?token=${emailConfirmationToken}`,
         currentYear: new Date().getFullYear(),
       },
     } as any);

@@ -5,14 +5,6 @@ import { TRequestController } from "../config/types.config";
 import prisma from '../config/prisma-db.config';
 import { Project, User } from '@prisma/client';
 
-declare global {
-    namespace Express {
-        interface Request {
-            user: User,
-            project: Project
-        }
-    }
-}
 
 export const ValidateAPIKey:TRequestController = async (req, res, next) => {
     if(!next) throw new InternalServerError("Something went wrong. Try again later.")

@@ -1,19 +1,9 @@
 import jwt from 'jsonwebtoken'
 
-import { BadRequest, InternalServerError, NotFound } from "../config/exceptions.config";
+import { InternalServerError, NotFound, Unauthorized } from "../config/exceptions.config";
 import { TRequestController } from "../config/types.config";
 import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
-import { User } from '@prisma/client';
 import prisma from '../config/prisma-db.config';
-import { email } from 'zod';
-
-declare global {
-    namespace Express {
-        interface Request {
-            user: Partial<User>
-        }
-    }
-}
 
 const isLoggedIn:TRequestController = async (req, res, next):Promise<void> => {
     if(!next){
@@ -23,7 +13,7 @@ const isLoggedIn:TRequestController = async (req, res, next):Promise<void> => {
     const sessionToken = req.cookies['session-token']
 
     if(!sessionToken || typeof sessionToken != 'string'){
-        throw new BadRequest("Token required.")
+        throw new Unauthorized("Token required.")
     }
 
     const decodedToken = await jwt.verify(sessionToken, process.env.JWT_SECRET as string) as {userId: string}

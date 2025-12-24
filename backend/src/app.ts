@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import {} from './types/express'
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'

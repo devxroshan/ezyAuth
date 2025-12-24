@@ -13,7 +13,7 @@ const createProject:TRequestController = async (req, res) => {
         throw new BadRequest("Project name required.")
     }
 
-    if(!req.user.id){
+    if(!req.user?.id){
         throw new BadRequest("User id required.")
     }
 
@@ -25,7 +25,7 @@ const createProject:TRequestController = async (req, res) => {
         }
     })
 
-    const apiKey = await jwt.sign({userId: req.user.id, projectId: project.id}, process.env.JWT_SECRET as string, {algorithm: 'HS512', expiresIn: '28d'})
+    const apiKey = await jwt.sign({userId: req.user?.id, projectId: project.id}, process.env.JWT_SECRET as string, {algorithm: 'HS512', expiresIn: '28d'})
 
     const updatedProject = await prisma.project.update({
         where: {
@@ -46,7 +46,7 @@ const createProject:TRequestController = async (req, res) => {
 const getProject:TRequestController = async (req, res) => {
     const projects = await prisma.project.findMany({
         where:{
-            authorId: req.user.id
+            authorId: req.user?.id
         }
     })
 
@@ -109,7 +109,7 @@ const deleteProject:TRequestController = async (req, res) => {
 
     await prisma.project.delete({
         where: {
-            authorId: req.user.id,
+            authorId: req.user?.id,
             id: projectId
         }
     })

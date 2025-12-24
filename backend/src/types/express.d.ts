@@ -1,7 +1,14 @@
-import "express";
+import express from 'express'
 
-declare module "express-serve-static-core" {
-  interface Response {
-    success: (msg:string, statusCode:number,data?:any) => void;
-  }
+import { Project, User } from "@prisma/client";
+
+declare global {
+    namespace Express {
+        interface Request {
+            user: Omit<User, 'password'>,
+            project: Project
+        }
+    }
 }
+
+export {}
