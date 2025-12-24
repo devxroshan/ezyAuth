@@ -8,6 +8,7 @@ import cors from 'cors'
 import authRoutes from './routes/auth.routes'
 import projectRoutes from './routes/project.routes'
 import projectUserRoutes from './routes/project-user.routes'
+import userRoutes from './routes/user.routes'
 
 // Filters
 import { allExceptionFilter } from './filters/all-exception.filter'
@@ -35,6 +36,7 @@ app.use(cors({
 
 // Routes
 app.use('/api/auth', authRoutes)
+app.use('/api/user', userRoutes)
 app.use('/api/project',IsLoggedIn, projectRoutes)
 app.use('/api/project-user/:apiKey',ValidateAPIKey, projectUserRoutes)
 
