@@ -5,11 +5,12 @@ import { TRequestController } from "../config/types.config";
 import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
 import { User } from '@prisma/client';
 import prisma from '../config/prisma-db.config';
+import { email } from 'zod';
 
 declare global {
     namespace Express {
         interface Request {
-            user: User
+            user: Partial<User>
         }
     }
 }
@@ -30,6 +31,14 @@ const isLoggedIn:TRequestController = async (req, res, next):Promise<void> => {
     const user = await prisma.user.findUnique({
         where: {
             id: decodedToken?.userId
+        },select: {
+            createdAt: true,
+            updatedAt: true,
+            name: true,
+            email: true,
+            id: true,
+            isVerified: true
+
         }
     })
 
