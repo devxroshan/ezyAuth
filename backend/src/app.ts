@@ -30,7 +30,7 @@ app.use(helmet())
 app.use(cors({
     origin: process.env.FRONTEND as string ?? 'http://localhost:3000',
     allowedHeaders: 'Content-Type',
-    methods: ['GET', 'PUT', 'POST', 'PATCH'],
+    methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
     credentials: true
 }))
 
