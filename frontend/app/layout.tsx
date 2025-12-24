@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { QueryProviderWrapper } from "./wrapper/QueryProviderWrapper";
 import { SessionCheckerWrapper } from "./wrapper/SessionCheckerWrapper";
+import { GetUserWrapper } from "./wrapper/GetUserWrapper";
 
 import Navbar from "./components/Navbar";
 
@@ -27,10 +28,12 @@ export default function RootLayout({
     <html lang="en">
       <QueryProviderWrapper>
         <SessionCheckerWrapper>
-          <body className={`${poppins.className} antialiased`}>
-            {children}
-            <Navbar />
-          </body>
+          <GetUserWrapper>
+            <body className={`${poppins.className} antialiased`}>
+              {children}
+              <Navbar />
+            </body>
+          </GetUserWrapper>
         </SessionCheckerWrapper>
       </QueryProviderWrapper>
     </html>

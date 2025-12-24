@@ -64,12 +64,12 @@ const Login = () => {
             </span>
           </div>
 
-          <button className={`${loginMutation.isPending?"bg-gray-300 cursor-default":"bg-white cursor-pointer"} w-full rounded-lg py-1 font-semibold hover:bg-gray-300 active:scale-95 transition-all`} disabled={loginMutation.isPending} onClick={() => {
-            if(!loginInfo.email || !loginInfo.password)return;
+          <button className={`${loginMutation.isPending?'bg-green-500 cursor-default':'bg-green-400 cursor-pointer'} w-full rounded-lg py-1 font-semibold hover:bg-green-500 active:scale-95 transition-all outline-none`} disabled={loginMutation.isPending} onClick={() => {
+            if(!loginInfo.email || !loginInfo.password) return;
 
             loginMutation.mutate(loginInfo)
           }}>
-            Login
+            {loginMutation.isPending?"Logging in...":"Login"}
           </button>
         </div>
 
