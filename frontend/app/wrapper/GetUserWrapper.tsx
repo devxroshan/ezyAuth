@@ -22,7 +22,7 @@ export const GetUserWrapper = ({children}:{children:React.ReactNode}) => {
 
     useEffect(() => {
         getUserMutation.mutate()
-    }, [])
+    })
 
     return <>
     {children}
