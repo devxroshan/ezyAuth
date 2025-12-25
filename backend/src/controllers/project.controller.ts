@@ -46,8 +46,14 @@ const getProject:TRequestController = async (req, res) => {
     const projects = await prisma.project.findMany({
         where:{
             authorId: req.user?.id
+        },
+        include: {
+            _count: {
+                select: { projectUser: true }
+            }
         }
     })
+
 
     if(projects.length <= 0){
         throw new NotFound("No projects yet.")
