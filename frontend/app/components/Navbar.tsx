@@ -34,7 +34,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`bg-foreground w-screen h-12 md:h-screen md:w-56 lg:w-72 md:border-r md:flex-col border-b border-border flex items-center justify-start px-3 md:py-2 md:px-4 md:gap-6 ${
+        className={`bg-foreground w-screen h-12 md:h-screen md:w-56 lg:w-[20vw] md:border-r md:flex-col border-b border-border flex items-center justify-start px-3 md:py-2 md:px-4 md:gap-6 ${
           omittedPaths.includes(pathname) ? "hidden" : ""
         }`}
       >

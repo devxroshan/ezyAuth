@@ -17,14 +17,7 @@ export default function Home() {
   // useStates
   const [isPopUpBlackScreen, setPopUpBlackScreen] = useState<boolean>(false);
   const [isCreate, setIsCreate] = useState<boolean>(false);
-  const [isViewProject, setIsViewProject] = useState<boolean>(false);
-  const [viewProject, setViewProject] = useState<IProject | null>(null);
   const [projectName, setProjectName] = useState<string>("");
-
-  const projectQuery = useQuery({
-    queryKey: ["projects"],
-    queryFn: GetProjectAPI,
-  });
 
   const createProjectMutation = useMutation({
     mutationFn: CreateProjectAPI,
@@ -39,25 +32,6 @@ export default function Home() {
     onError: (err) => {},
   });
 
-  const deleteProjectMutation = useMutation({
-    mutationFn: DeleteProjectAPI,
-    onSuccess: (data) => {
-      if (data.ok) {
-        projectStore.removeProject(viewProject!.id);
-        setIsViewProject(false);
-        setViewProject(null);
-        setPopUpBlackScreen(false);
-      }
-    },
-    onError: (err) => {},
-  });
-
-  useEffect(() => {
-    if (projectQuery.data?.ok) {
-      projectStore.setProjects(projectQuery?.data?.data);
-    }
-  }, [projectQuery.isPending]);
-
   return (
     <>
       <section className="w-screen md:w-fit h-fit md:h-screen md:items-start flex items-center overflow-x-hidden justify-start px-2 py-4 gap-5 flex-wrap">
@@ -68,11 +42,6 @@ export default function Home() {
             users={project._count?.projectUser ?? 0}
             id={project.id}
             createdOn={project.createdAt}
-            onClick={() => {
-              setIsViewProject(true);
-              setPopUpBlackScreen(true);
-              setViewProject(project);
-            }}
           />
         ))}
 
@@ -127,62 +96,6 @@ export default function Home() {
               >
                 Cancel
               </button>
-            </div>
-          )}
-
-          {isViewProject && viewProject && (
-            <div className="flex flex-col items-start justify-start select-none gap-3 w-[45vw] h-fit rounded-2xl border border-border px-3 py-2 bg-foreground">
-              <input
-                className="font-medium text-white text-2xl border border-border w-full px-2 py-1 rounded-xl outline-none bg-background"
-                readOnly
-                defaultValue={viewProject.name}
-              />
-              <span className="text-gray-400 text-lg">
-                Users: {viewProject._count?.projectUser ?? 0}
-              </span>
-              <span className="text-gray-400 text-lg">
-                Created On: {viewProject.createdAt.toString()}
-              </span>
-              <div className="flex gap-2 items-center justify-start">  
-                <span className="text-gray-400 font-medium">API Key</span>
-                <span className="text-white"> - </span>
-                <span className="text-white text-sm cursor-pointer" onClick={(e:React.MouseEvent<HTMLSpanElement>)=>{
-                  const target = e.target as HTMLSpanElement;
-                  navigator.clipboard.writeText(viewProject.apiKey);
-                  const originalText = target.innerText;
-                  target.innerText = "Copied!";
-                  setTimeout(() => {
-                    target.innerText = originalText;
-                  }, 5000);
-                }}>Copy</span>
-              </div>
-
-              <textarea
-                className="text-gray-400 w-full resize-none h-44 outline-none border-none"
-                defaultValue={viewProject.apiKey}
-                ></textarea>
-
-              <div className="flex w-full items-center justify-end gap-2">
-                <button
-                  className="bg-background/40 text-white border border-border px-5 rounded-lg py-1 cursor-pointer hover:bg-background/50 transition-all duration-300 active:scale-95 outline-none"
-                  onClick={() => {
-                    setIsViewProject(false);
-                    setPopUpBlackScreen(false);
-                    setViewProject(null);
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  className={`${deleteProjectMutation.isPending ? "bg-red-900 cursor-default" : "bg-red-800 cursor-pointer"} text-black px-5 rounded-lg py-1 hover:bg-red-900 transition-all duration-300 active:scale-95 outline-none`}
-                  disabled={deleteProjectMutation.isPending}
-                  onClick={() => {
-                    deleteProjectMutation.mutate(viewProject?.id);
-                  }}
-                >
-                  {deleteProjectMutation.isPending ? "Deleting..." : "Delete"}
-                </button>
-              </div>
             </div>
           )}
         </section>
