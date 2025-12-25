@@ -39,7 +39,6 @@ const ViewProject = () => {
 
     if (projectUsersQuery.data?.ok && !projectUsersQuery.isPending) {
       setProjectUsers(projectUsersQuery.data?.data ?? []);
-      console.log(projectUsersQuery.data?.data);
     }
   }, [projects.projects, projectUsersQuery.data]);
 
