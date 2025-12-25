@@ -12,6 +12,11 @@ export const GetProjectAPI =async () => {
     return res.data
 }
 
+export const GetProjectUserAPI =async (projectId:string) => {
+    const res = await api.get(`/project/${projectId}/users`)
+    return res.data
+}
+
 export const DeleteProjectAPI =async (projectId:string) => {
     const res = await api.delete(`/project/${projectId}`)
     return res.data
