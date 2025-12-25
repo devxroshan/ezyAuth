@@ -74,17 +74,6 @@ const getProjectUsers:TRequestController = async (req, res) => {
     const projectUsers = await prisma.projectUser.findMany({
         where: {
             projectId
-        },
-        select: {
-            name: true,
-            id: true,
-            createdAt: true,
-            updatedAt: true,
-            username: true,
-            isVerified: true,
-            email: true,
-            metadata: true,
-            projectId: true         
         }
     })
 
