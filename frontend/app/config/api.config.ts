@@ -1,5 +1,14 @@
 import axios, { Axios, AxiosError } from "axios";
 
+export interface APIResponse {
+    ok: boolean;
+    msg: string;
+    data: any;
+    statusCode?: number;
+    details?: any;
+    rawErr?: any;
+} 
+
 export const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND ?? "http://localhost:8000/api",
     withCredentials: true,

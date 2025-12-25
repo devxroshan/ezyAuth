@@ -1,11 +1,14 @@
 import { create } from 'zustand';
 
-interface IProject {
+export interface IProject {
     id: string;
     authorId: string;
     usersCount: string;
     name: string;
     createdAt: string;    
+    updatedAt: string;
+    apiKey: string;
+    _count: any;
 }
 
 interface IProjectStore {
