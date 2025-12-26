@@ -126,7 +126,7 @@ const ViewProject = () => {
                     >
                       {typeof user[key] === "object"
                         ? JSON.stringify(user[key])
-                        : user[key].toString()}
+                        : user[key].toString() || "-"}
                     </td>
                   ))}
                 </tr>
