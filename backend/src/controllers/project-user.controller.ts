@@ -13,6 +13,7 @@ import { mailTransporter } from "../config/mailer.config";
 import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
 import { schemaValidator } from "../utils/schema-validator.utils";
 import { ProjectUserSchema } from "../schema/project-user.schema";
+import { ProjectUser, User } from "@prisma/client";
 
 const projectUserSignUp: TRequestController = async (req, res) => {
   const isValidDetails = schemaValidator(ProjectUserSchema, {email: req.body.email, password: req.body.password})
@@ -75,7 +76,7 @@ const projectUserSignUp: TRequestController = async (req, res) => {
       name: newProjectUser.name || newProjectUser.email,
       confirmationUrl: `${
         process.env.BACKEND as string
-      }/api/project-user/${req.project?.apiKey}/verify-email?token=${emailConfirmationToken}`,
+      }/api/project-user/${req.params?.apiKey}/verify-email?token=${emailConfirmationToken}`,
       currentYear: new Date().getFullYear(),
     },
   } as any);
@@ -153,7 +154,7 @@ const projectUserLogin: TRequestController = async (req, res) => {
         name: doesUserExists.name,
         confirmationUrl: `${
           process.env.BACKEND as string
-        }/api/${req.project?.apiKey}/verify-email?token=${emailConfirmationToken}`,
+        }/api/project-user/${req.params?.apiKey}/verify-email?token=${emailConfirmationToken}`,
         currentYear: new Date().getFullYear(),
       },
     } as any);
@@ -190,7 +191,90 @@ const projectUserLogin: TRequestController = async (req, res) => {
     });
 };
 
+const projectUserUpdate:TRequestController = async (req, res) => {
+  const { id, projectId, createdAt, updatedAt, ...updateData } = req.body;
+
+  if(updateData.password){
+    updateData.password = await argon2.hash(updateData.password);
+  }
+
+  if(updateData.username){
+    const isUsernameAvailable = await prisma.projectUser.findFirst({
+      where: {
+        username: updateData.username,
+        id: {
+          not: req.params?.projectUserId as string
+        }
+      }
+    })
+    if(isUsernameAvailable){
+      throw new BadRequest("Username not available.")
+    }
+  }
+
+  if(updateData.email){
+    const isEmailTaken = await prisma.projectUser.findFirst({
+      where: {
+        email: updateData.email,
+        id: {
+          not: req.params?.projectUserId as string
+        }
+      }
+    })
+    if(isEmailTaken){
+      throw new BadRequest("Email is already taken.")
+    }
+
+    updateData.isVerified = false;
+
+    const emailConfirmationToken = await jwt.sign(  
+      {
+        userId: req.params?.projectUserId as string,
+      },
+      process.env.JWT_SECRET as string,
+      { algorithm: "HS512", expiresIn: "5m" }
+    );
+    await mailTransporter.sendMail({
+      to: updateData.email,
+      subject: "Email Verification",
+      template: "email-verification",
+      context: {
+        name: updateData.name || updateData.email,
+        confirmationUrl: `${
+          process.env.BACKEND as string
+        }/api/project-user/${req.params?.apiKey}/verify-email?token=${emailConfirmationToken}`,
+        currentYear: new Date().getFullYear(),
+      },
+    } as any);
+  }
+  
+  const updatedProjectUser =  await prisma.projectUser.update({
+    where: {
+      id: req.params?.projectUserId as string
+    },
+    data: updateData,
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      username: true,
+      email: true,
+      isVerified: true,
+      metadata: true,
+      projectId: true
+    }
+  })
+
+  res.status(200).json({
+    ok: true,
+    msg: "User updated successfully.",
+    data: updatedProjectUser,
+  });
+}
+
 
 export const ProjectUserSignUp = AsyncRequestHandler(projectUserSignUp)
 export const ProjectUserVerifyEmail = AsyncRequestHandler(projectUserVerifyEmail)
 export const ProjectUserLogin = AsyncRequestHandler(projectUserLogin)
+export const ProjectUserUpdate = AsyncRequestHandler(projectUserUpdate)
