@@ -8,6 +8,9 @@ declare global {
             user: Omit<User, 'password'>,
             project: Project
         }
+        interface Response {
+            success: (msg: string,statusCode:number, data?: any) => void,
+        }
     }
 }
 

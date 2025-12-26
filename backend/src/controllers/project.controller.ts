@@ -78,7 +78,8 @@ const getProjectUsers:TRequestController = async (req, res) => {
     })
 
     if(projectUsers.length <= 0){
-        throw new NotFound("No ProjectUser yet.")
+        res.success("No ProjectUser yet.", 200, [])
+        return;
     }
 
     res.status(200).json({
