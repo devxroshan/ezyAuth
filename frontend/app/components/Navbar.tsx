@@ -24,11 +24,7 @@ const Navbar = () => {
     {
       name: "Home",
       path: "/",
-    },
-    {
-      name: "Trash",
-      path: "/trash",
-    },
+    }
   ];
 
   return (
@@ -65,7 +61,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[63vh] hover:bg-gray-700/20 w-full py-2 hidden md:flex px-2">
+        <div className="gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[70vh] hover:bg-gray-700/20 w-full py-2 hidden md:flex px-2">
           <Image
             src={"/test.png"}
             width={35}
@@ -98,7 +94,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="flex gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[63vh] hover:bg-gray-700/20 w-full py-2 px-2">
+          <div className="flex gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[70vh] hover:bg-gray-700/20 w-full py-2 px-2">
             <Image
               src={"/test.png"}
               width={35}
