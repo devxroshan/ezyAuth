@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 import { AsyncRequestHandler } from "../utils/async-request-handler.utils";
 import { TRequestController } from "../config/types.config";
 import { BadRequest, NotFound } from "../config/exceptions.config";
-import prisma from "../config/prisma-db.config";;
+import prisma from "../config/prisma-db.config";import redis from '../config/redis.config';
+;
 
 const createProject:TRequestController = async (req, res) => {
     const projectName = req.body.name
@@ -43,6 +44,13 @@ const createProject:TRequestController = async (req, res) => {
 }
 
 const getProject:TRequestController = async (req, res) => {
+    const cachedProjects = await redis.get(`projects_${req.user?.id}`)
+    
+    if(cachedProjects){
+        res.success("Project fetched successfully.", 200, JSON.parse(cachedProjects))
+        return;
+    }
+
     const projects = await prisma.project.findMany({
         where:{
             authorId: req.user?.id
@@ -53,6 +61,8 @@ const getProject:TRequestController = async (req, res) => {
             }
         }
     })
+
+    await redis.set(`projects_${req.user?.id}`, JSON.stringify(projects), 'EX', 300)
 
 
     if(projects.length <= 0){
@@ -70,6 +80,12 @@ const getProjectUsers:TRequestController = async (req, res) => {
     const projectId = req.params.project_id
 
     if(!projectId || typeof projectId != 'string') throw new BadRequest('Project ID required.')
+
+    const cachedProjectUsers = await redis.get(`project_users_${projectId}`)
+    if(cachedProjectUsers){
+        res.success("ProjectUser fetched successfully.", 200, JSON.parse(cachedProjectUsers))
+        return;
+    }
     
     const projectUsers = await prisma.projectUser.findMany({
         where: {
@@ -81,6 +97,8 @@ const getProjectUsers:TRequestController = async (req, res) => {
         res.success("No ProjectUser yet.", 200, [])
         return;
     }
+
+    await redis.set(`project_users_${projectId}`, JSON.stringify(projectUsers), 'EX', 300)
 
     res.status(200).json({
         ok: true,
@@ -108,6 +126,8 @@ const deleteProject:TRequestController = async (req, res) => {
             id: projectId
         }
     })
+
+    await redis.del(`project_users_${projectId}`)
 
     res.status(200).json({
         ok: true,
