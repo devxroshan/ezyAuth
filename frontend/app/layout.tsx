@@ -8,6 +8,7 @@ import { GetUserWrapper } from "./wrapper/GetUserWrapper";
 import { GetUserProjectWrapper } from "./wrapper/GetUserProjectWrapper";
 
 import Navbar from "./components/Navbar";
+import AccountSettings from "./components/AccountSettings";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -36,6 +37,7 @@ export default function RootLayout({
               >
                 <Navbar />
                 {children}
+                <AccountSettings />
               </body>
             </GetUserProjectWrapper>
           </GetUserWrapper>

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 // Stores
 import { useUserStore } from "../stores/user.store";
+import { useAppStore } from "../stores/app.store";
 
 const Navbar = () => {
   // Hooks
@@ -17,6 +18,7 @@ const Navbar = () => {
 
   // Stores
   const userStore = useUserStore();
+  const appStore = useAppStore();
 
   const omittedPaths: string[] = ["/login", "/signup"];
 
@@ -24,7 +26,7 @@ const Navbar = () => {
     {
       name: "Home",
       path: "/",
-    }
+    },
   ];
 
   return (
@@ -61,7 +63,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[70vh] hover:bg-gray-700/20 w-full py-2 hidden md:flex px-2">
+        <div className="gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[70vh] hover:bg-gray-700/20 w-full py-2 hidden md:flex px-2" onClick={() => appStore.setIsAccountSettings(true)}>
           <Image
             src={"/test.png"}
             width={35}
@@ -74,7 +76,7 @@ const Navbar = () => {
             <input
               className="text-xs font-medium text-gray-500 outline-none w-32 lg:w-46 flex-1 select-none cursor-pointer"
               readOnly
-              defaultValue={userStore.user?.email ?? ""} 
+              defaultValue={userStore.user?.email ?? ""}
             />
           </div>
         </div>
@@ -94,7 +96,10 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="flex gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[70vh] hover:bg-gray-700/20 w-full py-2 px-2">
+          <div
+            className="flex gap-2 rounded-lg cursor-pointer transition-all duration-300 items-center justify-start text-white select-none mt-[70vh] hover:bg-gray-700/20 w-full py-2 px-2"
+            onClick={() => appStore.setIsAccountSettings(true)}
+          >
             <Image
               src={"/test.png"}
               width={35}
