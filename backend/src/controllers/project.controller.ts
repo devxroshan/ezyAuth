@@ -44,7 +44,7 @@ const createProject:TRequestController = async (req, res) => {
 }
 
 const getProject:TRequestController = async (req, res) => {
-    const cachedProjects = await redis.get(`projects_${req.user?.id}`)
+    const cachedProjects = await redis.get(`project_${req.user?.id}`)
     
     if(cachedProjects){
         res.success("Project fetched successfully.", 200, JSON.parse(cachedProjects))
@@ -62,7 +62,7 @@ const getProject:TRequestController = async (req, res) => {
         }
     })
 
-    await redis.set(`projects_${req.user?.id}`, JSON.stringify(projects), 'EX', 300)
+    await redis.set(`project_${req.user?.id}`, JSON.stringify(projects), 'EX', 300)
 
 
     if(projects.length <= 0){
@@ -128,6 +128,7 @@ const deleteProject:TRequestController = async (req, res) => {
     })
 
     await redis.del(`project_users_${projectId}`)
+    await redis.del(`project_${req.user?.id}`)
 
     res.status(200).json({
         ok: true,
