@@ -76,7 +76,7 @@ const projectUserSignUp: TRequestController = async (req, res) => {
       name: newProjectUser.name || newProjectUser.email,
       confirmationUrl: `${
         process.env.BACKEND as string
-      }/api/project-user/${req.params?.apiKey}/verify-email?token=${emailConfirmationToken}`,
+      }/api/project-user/verify-email?token=${emailConfirmationToken}`,
       currentYear: new Date().getFullYear(),
     },
   } as any);
@@ -154,7 +154,7 @@ const projectUserLogin: TRequestController = async (req, res) => {
         name: doesUserExists.name,
         confirmationUrl: `${
           process.env.BACKEND as string
-        }/api/project-user/${req.params?.apiKey}/verify-email?token=${emailConfirmationToken}`,
+        }/api/project-user/verify-email?token=${emailConfirmationToken}`,
         currentYear: new Date().getFullYear(),
       },
     } as any);
@@ -242,7 +242,7 @@ const projectUserUpdate:TRequestController = async (req, res) => {
         name: updateData.name || updateData.email,
         confirmationUrl: `${
           process.env.BACKEND as string
-        }/api/project-user/${req.params?.apiKey}/verify-email?token=${emailConfirmationToken}`,
+        }/api/project-user/verify-email?token=${emailConfirmationToken}`,
         currentYear: new Date().getFullYear(),
       },
     } as any);

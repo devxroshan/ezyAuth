@@ -39,7 +39,7 @@ app.use(cors({
 app.use('/api/auth', authRoutes)
 app.use('/api/user',IsLoggedIn,responseMiddleware, userRoutes)
 app.use('/api/project',IsLoggedIn,responseMiddleware, projectRoutes)
-app.use('/api/project-user/:apiKey',ValidateAPIKey, projectUserRoutes)
+app.use('/api/project-user/', projectUserRoutes)
 
 
 
