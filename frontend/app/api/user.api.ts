@@ -10,3 +10,8 @@ export const ChangePasswordAPI = async ({ currentPassword, newPassword }:{curren
     const res = await api.patch('/user/change-password', { currentPassword, newPassword })
     return res.data;
 }
+
+export const UpdateUserAPI = async ({ name, email }:{name?: string, email?: string}) => {
+    const res = await api.patch('/user/update', { name, email })
+    return res.data;
+}

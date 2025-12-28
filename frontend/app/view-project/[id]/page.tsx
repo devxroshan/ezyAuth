@@ -99,7 +99,7 @@ const ViewProject = () => {
         {projectUsers.length != 0 && (
           <table className="min-w-max text-xs font-medium table-fixed border-collapse">
             {/* HEADER */}
-            <thead className="sticky top-0 z-10 bg-foreground border-b border-border">
+            <thead className="sticky top-0 bg-foreground border-b border-border">
               <tr>
                 {Object.keys(projectUsers[0]).map((key) => (
                   <th

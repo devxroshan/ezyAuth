@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useAppStore } from "../stores/app.store";
 import { useUserStore } from "../stores/user.store";
 import { useMutation } from "@tanstack/react-query";
-import { ChangePasswordAPI } from "../api/user.api";
+import { ChangePasswordAPI, UpdateUserAPI } from "../api/user.api";
 import { useDebounceAPI } from "../hooks/useDebounceAPI.hook";
 
 
@@ -22,6 +22,9 @@ const AccountSettings = () => {
   const [userChangeInfo, setUserChangeInfo] = useState<UserChangeInfo>({});
 
 
+  const updateUserInfoDebounce = useDebounceAPI(UpdateUserAPI, 400);
+
+
   const changePasswordMutation = useMutation({
     mutationFn: ChangePasswordAPI,
     onSuccess: (data) => {
@@ -31,9 +34,24 @@ const AccountSettings = () => {
           currentPassword: "",
           newPassword: ""
         })
-        console.log("Password changed successfully", data);
       }
-      console.log("Password change response", data);
+    },
+    onError: (error) => {
+      console.log("Error changing password", error);
+    },
+  })
+
+  const changeEmailMutation = useMutation({
+    mutationFn: UpdateUserAPI,
+    onSuccess: (data) => {
+      if(data.ok){
+        setUserChangeInfo({
+          ...userChangeInfo,
+          currentPassword: "",
+          newPassword: ""
+        })
+        userStore.setUser(data.user);
+      }
     },
     onError: (error) => {
       console.log("Error changing password", error);
@@ -76,8 +94,21 @@ const AccountSettings = () => {
               </div>
 
               <div className="flex flex-col gap-2 text-white itcems-start justify-start h-full w-[70%]">
-                <input type="text" className="rounded-lg focus:outline-none focus:ring-1 ring-green-400 bg-background border border-border px-2 py-1 w-full" placeholder="Name" value={userChangeInfo?.name ?? ""} onChange={(e) => setUserChangeInfo({...userChangeInfo, name: e.target.value})}/>
-                <input type="text" className="rounded-lg focus:outline-none focus:ring-1 ring-green-400 bg-background border border-border px-2 py-1 w-full" placeholder=" Email"value={userChangeInfo?.email ?? ""} onChange={(e) => setUserChangeInfo({...userChangeInfo, email: e.target.value})}/>
+                <input type="text" className="rounded-lg focus:outline-none focus:ring-1 ring-green-400 bg-background border border-border px-2 py-1 w-full" placeholder="Name" value={userChangeInfo?.name ?? ""} onChange={(e) => {
+                  updateUserInfoDebounce.mutate({name: e.target.value})
+                  setUserChangeInfo({...userChangeInfo, name: e.target.value})}
+                }/>
+                <div className="flex w-full items-center justify-center gap-2">   
+                  <input type="text" className="rounded-lg focus:outline-none focus:ring-1 ring-green-400 bg-background border border-border px-2 py-1 w-full" placeholder=" Email"value={userChangeInfo?.email ?? ""} onChange={(e) => {
+                    setUserChangeInfo({...userChangeInfo, email: e.target.value})}
+                  }/>
+
+                  <button className={`px-4 ${changeEmailMutation.isPending || userChangeInfo.email == userStore.user?.email ? "bg-green-800 cursor-default" : "bg-green-400 hover:bg-green-500 active:scale-95 cursor-pointer hover:font-medium"} py-1 rounded-lg text-black transition-all`} disabled={changeEmailMutation.isPending} onClick={()=>{
+                    if(!userChangeInfo.email || userChangeInfo.email == userStore.user?.email) return;
+
+                    changeEmailMutation.mutate({email: userChangeInfo.email})
+                  }}>{changeEmailMutation.isPending ? "Changing..." : "Change"}</button>
+                </div>
                 <input type="text" className="rounded-lg focus:outline-none focus:ring-1 ring-green-400 bg-background border border-border px-2 py-1 w-full" placeholder="Current Password" value={userChangeInfo?.currentPassword ?? ""} onChange={(e) => setUserChangeInfo({...userChangeInfo, currentPassword: e.target.value})}/>
                 <input type="text" className="rounded-lg focus:outline-none focus:ring-1 ring-green-400 bg-background border border-border px-2 py-1 w-full" placeholder="New Password" value={userChangeInfo?.newPassword ?? ""} onChange={(e) => setUserChangeInfo({...userChangeInfo, newPassword: e.target.value})}/>
 
