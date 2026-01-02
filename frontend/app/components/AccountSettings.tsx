@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppStore } from "../stores/app.store";
 import { useUserStore } from "../stores/user.store";
 import { useMutation } from "@tanstack/react-query";
