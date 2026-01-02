@@ -1,8 +1,7 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useProjectStore } from "../stores/project.store";
-import { useAppStore } from "../stores/app.store";
 import { GetProjectAPI } from "../api/project.api";
 
 export const GetUserProjectWrapper = ({

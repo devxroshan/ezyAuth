@@ -1,6 +1,6 @@
 'use client'
 import { useMutation } from "@tanstack/react-query"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { GetUserAPI } from "../api/user.api"
 import { useUserStore } from "../stores/user.store"
 import { useAppStore } from "../stores/app.store"

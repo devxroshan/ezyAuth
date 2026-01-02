@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from "react";
+import {useState} from "react";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { LoginAPI } from "../api/auth.api";
